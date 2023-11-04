@@ -6,7 +6,9 @@ let message = document.querySelector(".msg");
 //! skoru index.html'den cekebilirdik fakat cok kullanacagimiz icin bu daha tercih edilen yol.
 let skor = 10;
 
-let maximumScore = 0;
+let maximumScore = localStorage.getItem("top-score") || 0;
+//! ------browserda, DOM da top score değerini local storage dan okuyarak güncelle, özellikle 2. ve 3. oyuncular için gerekli
+document.querySelector(".top-score").textContent = maximumScore;
 
 //! Check butonuna basildiginda yapilacak islemler
 // addeventlistener iki tane parametre alir icine
@@ -27,6 +29,8 @@ document.querySelector(".check").addEventListener("click", () => {
     //* Top-Score Kontrolu
 
     if (skor > maximumScore) {
+      localStorage.setItem("top-score", skor);
+
       maximumScore = skor;
       document.querySelector(".top-score").textContent = maximumScore;
     }
@@ -81,5 +85,15 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-localStorage.setItem(".top-score", maximumScore);
-console.log(localStorage.getItem(".top-score"));
+document.querySelector(".check").addEventListener("click", () => {
+  guess = document.querySelector(".guess").value;
+  const guessNumber = parseInt(guess);
+
+  if (guessNumber >= 1 && guessNumber <= 20 && !isNaN(guessNumber)) {
+    //Doğru sayi girilmisse devam ettir
+  } else {
+    message.textContent =
+      "Invalid Number! Please enter a number between 1 and 20";
+    skor++;
+  }
+});
